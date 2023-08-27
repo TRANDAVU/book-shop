@@ -8,11 +8,11 @@
                 <div class="col-lg-4">
                     <div class="left-content">
                         <div class="inner-content">
-                            <h3>Bookshop</h3>
-                            <h4>Tri thức trên từng trang giấy</h4>
+                            <h3>MidwayCafe</h3>
+                            <h4>THE BEST EXPERIENCE</h4>
                             <div class="main-white-button scroll-to-section">
                                 <a href="#reservation">
-                                    <h2>Mua ngay</h2>
+                                    <h2>Make A Reservation</h2>
                                 </a>
                             </div>
                         </div>
@@ -86,8 +86,8 @@
             <div class="row">
                 <div class="col-lg-4 offset-lg-4 text-center">
                     <div class="section-heading">
-                        <h6>CONG DOAN</h6>
-                        <h2>STORAGE AND DEVELOPMENT</h2>
+                        <h6>Midway Week</h6>
+                        <h2>This Week’s Special Meal Offers</h2>
                     </div>
                 </div>
             </div>
@@ -101,11 +101,11 @@
                                         <ul>
 
                                             <li><a href='#tabs-1'><img src="{{ asset('assets/images/tab-icon-01.png') }}"
-                                                        width="50" alt="">Modern</a></li>
+                                                        alt="">Breakfast</a></li>
                                             <li><a href='#tabs-2'><img src="{{ asset('assets/images/tab-icon-02.png') }}"
-                                                        width="50" alt="">Childhoods</a></a></li>
+                                                        alt="">Lunch</a></a></li>
                                             <li><a href='#tabs-3'><img src="{{ asset('assets/images/tab-icon-03.png') }}"
-                                                        width="50" alt="">Novel</a></a></li>
+                                                        alt="">Dinner</a></a></li>
 
                                         </ul>
                                     </div>
@@ -153,7 +153,7 @@
                                                                     <h4>{{ $item->name }}</h4>
                                                                     <p>{{ $item->description }}</p>
                                                                     <div class="price">
-                                                                        <h6>VND: {{ $item->price }}</h6>
+                                                                        <h6>{{ $item->price }}</h6>
                                                                     </div>
                                                                     <span class="product_rating">
                                                                         @for ($i = 1; $i <= $whole; $i++)
@@ -212,7 +212,7 @@
                                                                     <h4>{{ $item->name }}</h4>
                                                                     <p>{{ $item->description }}</p>
                                                                     <div class="price">
-                                                                        <h6>VND: {{ $item->price }}</h6>
+                                                                        <h6>{{ $item->price }}</h6>
                                                                     </div>
                                                                     <span class="product_rating">
                                                                         @for ($i = 1; $i <= $whole; $i++)
@@ -278,7 +278,7 @@
                                                                     <h4>{{ $item->name }}</h4>
                                                                     <p>{{ $item->description }}</p>
                                                                     <div class="price">
-                                                                        <h6>VND: {{ $item->price }}</h6>
+                                                                        <h6>{{ $item->price }}</h6>
                                                                     </div>
                                                                     <span class="product_rating">
                                                                         @for ($i = 1; $i <= $whole; $i++)
@@ -336,7 +336,7 @@
                                                                     <h4>{{ $item->name }}</h4>
                                                                     <p>{{ $item->description }}</p>
                                                                     <div class="price">
-                                                                        <h6>VND: {{ $item->price }}</h6>
+                                                                        <h6>{{ $item->price }}</h6>
                                                                     </div>
                                                                     <span class="product_rating">
                                                                         @for ($i = 1; $i <= $whole; $i++)
@@ -401,7 +401,7 @@
                                                                     <h4>{{ $item->name }}</h4>
                                                                     <p>{{ $item->description }}</p>
                                                                     <div class="price">
-                                                                        <h6>VND: {{ $item->price }}</h6>
+                                                                        <h6>{{ $item->price }}</h6>
                                                                     </div>
                                                                     <span class="product_rating">
                                                                         @for ($i = 1; $i <= $whole; $i++)
@@ -461,7 +461,7 @@
                                                                     <h4>{{ $item->name }}</h4>
                                                                     <p>{{ $item->description }}</p>
                                                                     <div class="price">
-                                                                        <h6>VND: {{ $item->price }}</h6>
+                                                                        <h6>{{ $item->price }}</h6>
                                                                     </div>
                                                                     <span class="product_rating">
                                                                         @for ($i = 1; $i <= $whole; $i++)
@@ -523,7 +523,7 @@
                             <div class='card' style="background-image: url({{ asset('assets/images/' . $img) }})">
 
                                 <div class="price">
-                                    <h6>VND: {{ $product->price }}</h6>
+                                    <h6>{{ $product->price }}</h6>
                                     @if ($product->available != 'Stock')
                                         <h4 style="">Out Of Stock</h4>
                                     @endif
@@ -609,7 +609,7 @@
             <div class="row">
                 <div class="col-lg-4 offset-lg-4 text-center">
                     <div class="section-heading">
-                        <h6>Our Author</h6>
+                        <h6>Our Chefs</h6>
                         <h2>We offer the best ingredients for you</h2>
                     </div>
                 </div>
@@ -617,28 +617,27 @@
 
             <div class="row">
                 @foreach ($chefs as $chef)
-                    <div class="col-lg-4">
-                        <div class="chef-item">
-                            <div class="thumb">
-                                <div class="overlay"></div>
-                                <ul class="social-icons">
-                                    <li><a href="{{ $chef->facebook_link }}" target="_blank"><i
-                                                class="fa fa-facebook"></i></a></li>
-                                    <li><a href="{{ $chef->twitter_link }}" target="_blank"><i
-                                                class="fa fa-twitter"></i></a></li>
-                                    <li><a href="{{ $chef->instragram_link }}" target="_blank"><i
-                                                class="fa fa-instagram"></i></a></li>
-                                </ul>
-                                <img src="{{ asset('assets/images/' . $chef->image) }}" alt="Chef #1">
-                            </div>
-                            <div class="down-content">
-                                <h4>{{ $chef->name }}</h4>
-                                <span>{{ $chef->job_title }}</span>
-                            </div>
+                <div class="col-lg-4">
+                    <div class="chef-item">
+                        <div class="thumb">
+                            <div class="overlay"></div>
+                            <ul class="social-icons">
+                                <li><a href="{{ $chef->facebook_link }}" target="_blank"><i
+                                            class="fa fa-facebook"></i></a></li>
+                                <li><a href="{{ $chef->twitter_link }}" target="_blank"><i
+                                            class="fa fa-twitter"></i></a></li>
+                                <li><a href="{{ $chef->instragram_link }}" target="_blank"><i
+                                            class="fa fa-instagram"></i></a></li>
+                            </ul>
+                            <img src="{{ asset('assets/images/' . $chef->image) }}" alt="Chef #1">
+                        </div>
+                        <div class="down-content">
+                            <h4>{{ $chef->name }}</h4>
+                            <span>{{ $chef->job_title }}</span>
                         </div>
                     </div>
-                @endforeach
-
+                </div>
+            @endforeach
             </div>
         </div>
     </section>
@@ -652,9 +651,9 @@
                     <div class="left-text-content">
                         <div class="section-heading">
                             <h6>Contact Us</h6>
-                            <h2>Here is a treasure trove of books for you to learn about</h2>
+                            <h2>Here You Can Make A Reservation Or Just walkin to our cafe</h2>
                         </div>
-                        <p>Contact me if you have any need.</p>
+                        <p>Members of Midway Dine are always active to response your call.</p>
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="phone">
@@ -669,8 +668,9 @@
                                 <div class="message">
                                     <i class="fa fa-envelope"></i>
                                     <h4>Emails</h4>
-                                    <span><a href="mailto:tuoitho@gmail.com">tuoitho@gmail.com</a><br>
-                                        <a href="mailto:contact@gmail.com">contact@gmail.com</a><br>
+                                    <span><a
+                                            href="mailto:sajeebchakraborty.cse2000@gmail.com">sajeebchakraborty.cse2000@gmail.com</a><br>
+                                            <a href="mailto:contact@gmail.com">contact@gmail.com</a><br>
                                     </span>
                                 </div>
                             </div>
@@ -706,12 +706,19 @@
                                 <div class="col-md-6 col-sm-12">
                                     <fieldset>
                                         <select value="number-guests" name="no_guest" id="number-guests">
-                                            <option value="number-guests">Number Of Book</option>
+                                            <option value="number-guests">Number Of Guests</option>
                                             <option name="1" id="1">1</option>
                                             <option name="2" id="2">2</option>
                                             <option name="3" id="3">3</option>
                                             <option name="4" id="4">4</option>
-
+                                            <option name="5" id="5">5</option>
+                                            <option name="6" id="6">6</option>
+                                            <option name="7" id="7">7</option>
+                                            <option name="8" id="8">8</option>
+                                            <option name="9" id="9">9</option>
+                                            <option name="10" id="10">10</option>
+                                            <option name="11" id="11">11</option>
+                                            <option name="12" id="12">12</option>
                                         </select>
                                     </fieldset>
                                 </div>
@@ -729,10 +736,10 @@
                                 <div class="col-md-6 col-sm-12">
                                     <fieldset>
                                         <select value="time" name="time" id="time">
-                                            <option value="time">Type</option>
-                                            <option name="long-episode" id="long-episode">long episode</option>
-                                            <option name="session" id="session">Session</option>
-                                            <option name="novel" id="novel">Novel</option>
+                                            <option value="time">Time</option>
+                                            <option name="Breakfast" id="Breakfast">Breakfast</option>
+                                            <option name="Lunch" id="Lunch">Lunch</option>
+                                            <option name="Dinner" id="Dinner">Dinner</option>
                                         </select>
                                     </fieldset>
                                 </div>
@@ -743,7 +750,8 @@
                                 </div>
                                 <div class="col-lg-12">
                                     <fieldset>
-                                        <button type="submit" id="form-submit" class="main-button-icon">Order</button>
+                                        <button type="submit" id="form-submit" class="main-button-icon">Make A
+                                            Reservation</button>
                                     </fieldset>
                                 </div>
                             </div>

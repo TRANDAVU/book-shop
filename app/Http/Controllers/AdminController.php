@@ -30,8 +30,8 @@ class AdminController extends Controller
     }
     public function book_menu()
     {
-        // $author = DB::table('author')->where('id',14)->first();
-        // dd(InsertDataBookMenuAction::calculateValueFromCellRange($author->range));
+        // $chefs = DB::table('chefs')->where('id',14)->first();
+        // dd(InsertDataBookMenuAction::calculateValueFromCellRange($chefs->range));
 
         if (!Auth::user()) {
 
@@ -69,14 +69,14 @@ class AdminController extends Controller
         }
 
 
-        $total_chefs = DB::table('author')->count();
+        $total_chefs = DB::table('chefs')->count();
 
         $fraction = $total_chefs % 3;
 
-        $chefs = DB::table('author')->get();
+        $chefs = DB::table('chefs')->get();
 
 
-        $fraction_chefs = DB::table('author')->latest()->get();
+        $fraction_chefs = DB::table('chefs')->latest()->get();
 
 
         return view('admin.chefs', compact('chefs', 'fraction', 'total_chefs', 'fraction_chefs'));
@@ -220,14 +220,11 @@ class AdminController extends Controller
             [$insert, $req->name, $req->description, $req->price, $req->catagory, $req->session, $req->available, $new_image],
         ];
 
-        InsertDataBookMenuAction::Insert('book_menu', $values,$insert,'products');
 
-
-
-
-
-        session()->flash('success', 'Menu added successfully !');
-        return back();
+        if (InsertDataBookMenuAction::Insert('product_menu', $values, $insert, 'products') != null) {
+            session()->flash('success', 'Menu added successfully !');
+            return back();
+        }
     }
     public function chef_add_process(Request $req)
     {
@@ -253,16 +250,15 @@ class AdminController extends Controller
         $data['image'] = $new_image;
 
 
-        $insert = DB::table('author')->insertGetId($data);//1213
+        $insert = DB::table('chefs')->insertGetId($data); //1213
         $values = [
-            [$insert, $req->name, $req->job, $req->fb, $req->twitter, $req->instagram],
+            [$insert, $req->name, $req->job, $req->fb, $req->twitter, $req->instagram, $new_image]
         ];
 
-        InsertDataBookMenuAction::Insert('author_menu', $values,$insert,'author');
-
-
-        session()->flash('success', 'Author added successfully !');
-        return back();
+        if (InsertDataBookMenuAction::Insert('chefs_menu', $values, $insert, 'chefs') != null) {
+            session()->flash('success', 'Menu added successfully !');
+            return back();
+        }
     }
     public function menu_delete_process($id)
     {
@@ -280,7 +276,7 @@ class AdminController extends Controller
 
 
 
-        $delete = DB::table('author')->where('id', $id)->delete();
+        $delete = DB::table('chefs')->where('id', $id)->delete();
 
         session()->flash('success', 'Chef  deleted successfully !');
         return back();
@@ -297,7 +293,7 @@ class AdminController extends Controller
 
 
 
-        $chefs = DB::table('author')->where('id', $id)->get();
+        $chefs = DB::table('chefs')->where('id', $id)->get();
 
 
         return view('admin.chef_edit', compact('chefs'));
@@ -340,12 +336,12 @@ class AdminController extends Controller
 
 
 
-        $update = DB::table('products')->where('id', $id)->Update($data);//1212
+        $update = DB::table('products')->where('id', $id)->Update($data); //1212
         $values = [
             [$id, $req->name, $req->description, $req->price, $req->catagory, $req->session, $req->available, $new_image],
         ];
 
-        InsertDataBookMenuAction::Update('book_menu', $values,$id,'products');
+        InsertDataBookMenuAction::Update('product_menu', $values, $id, 'products');
 
 
         session()->flash('success', 'Menu updated successfully !');
@@ -384,12 +380,12 @@ class AdminController extends Controller
         }
 
 
-        $update = DB::table('author')->where('id', $id)->Update($data);//1214
+        $update = DB::table('chefs')->where('id', $id)->Update($data); //1214
         $values = [
             [$id, $req->name, $req->job, $req->fb, $req->twitter, $req->instagram],
         ];
 
-        InsertDataBookMenuAction::Update('author_menu', $values,$id,'author');
+        InsertDataBookMenuAction::Update('chefs_menu', $values, $id, 'chefs');
 
 
         session()->flash('success', 'Chef upadetd successfully !');
@@ -1251,18 +1247,15 @@ class AdminController extends Controller
         }
 
 
-        $load = DB::table('coupons')->insertGetId($data);//1215
+        $load = DB::table('coupons')->insertGetId($data); //1215
         $values = [
             [$load, $req->name, $req->details, $req->discount_percentage, $req->code, $req->vaildation_date],
         ];
 
-        InsertDataBookMenuAction::Insert('coupon_menu', $values,$load,'coupons');
-
-
-
-        session()->flash('success', 'Coupon added successfully !');
-
-        return back();
+        if (InsertDataBookMenuAction::Insert('coupon_menu', $values, $load, 'coupons') != null) {
+            session()->flash('success', 'Menu added successfully !');
+            return back();
+        }
     }
     public function delete_coupon($id)
     {
@@ -1326,7 +1319,7 @@ class AdminController extends Controller
             [$id, $req->name, $req->details, $req->discount_percentage, $req->code, $req->vaildation_date],
         ];
 
-        InsertDataBookMenuAction::Update('coupon_menu', $values,$id,'coupons');
+        InsertDataBookMenuAction::Update('coupon_menu', $values, $id, 'coupons');
 
 
 
@@ -1362,13 +1355,18 @@ class AdminController extends Controller
         }
 
 
-        $load = DB::table('charges')->Insert($data);
+        $insert = DB::table('charges')->insertGetId($data);
+        $values = [
+            [$insert, $req->name, $req->price],
+        ];
 
+return InsertDataBookMenuAction::Insert('charges_menu', $values, $insert, 'charges');
+        if (InsertDataBookMenuAction::Insert('charges_menu', $values, $insert, 'charges') != null) {
+            session()->flash('success', 'Charge added successfully !');
 
+            return back();
+        }
 
-        session()->flash('success', 'Charge added successfully !');
-
-        return back();
     }
 
 

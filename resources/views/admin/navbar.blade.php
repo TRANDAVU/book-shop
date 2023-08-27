@@ -31,7 +31,7 @@
             <span class="menu-icon">
               <i class="mdi mdi-table-large"></i>
             </span>
-            <span class="menu-title">Author</span>
+            <span class="menu-title">Chefs</span>
           </a>
         </li>
         <li class="nav-item menu-items">

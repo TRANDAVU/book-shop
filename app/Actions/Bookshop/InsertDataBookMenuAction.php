@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Actions\Bookshop;
+
 use Google\Client;
 use Google\Service\Sheets;
 use Illuminate\Support\Facades\DB;
+
 class InsertDataBookMenuAction
 {
 
@@ -18,7 +20,7 @@ class InsertDataBookMenuAction
         $service = new Sheets($client);
 
         $spreadsheetId = '1ezq5ThxFIliPKe1ib7nuldoLtJOe0VHtGF2BKgjw2b4';
-        $range = $sheet.'!A:H';
+        $range = $sheet . '!A:M';
         // Điều chỉnh phạm vi theo nhu cầu
 
         $response = $service->spreadsheets_values->get($spreadsheetId, $range);
@@ -28,7 +30,8 @@ class InsertDataBookMenuAction
         return $values;
     }
 
-    public static function Insert($sheet,$values,$ID_product,$table){
+    public static function Insert($sheet, $values, $ID_product, $table)
+    {
         $client = new Client();
         $client->setApplicationName('Your App Name');
         $client->setScopes([Sheets::SPREADSHEETS]);
@@ -38,7 +41,7 @@ class InsertDataBookMenuAction
         $service = new Sheets($client);
 
         $spreadsheetId = '1ezq5ThxFIliPKe1ib7nuldoLtJOe0VHtGF2BKgjw2b4';
-        $range = $sheet.'!A2'; // Adjust this range as needed bookshops
+        $range = $sheet . '!A2'; // Adjust this range as needed bookshops
 
         $body = new \Google_Service_Sheets_ValueRange([
             'values' => $values,
@@ -51,11 +54,15 @@ class InsertDataBookMenuAction
         $result = $service->spreadsheets_values->append($spreadsheetId, $range, $body, $params);
         $updatedRange = $result->tableRange;
 
-        DB::table($table)->where('id',$ID_product)->update(['range'=>$updatedRange]);
+        // DB::table($table)->where('id',$ID_product)->update(['range'=>$updatedRange]);
+        // DB::table($table)->where('id', '=', $ID_product)->update(array('range' => $updatedRange));
+
+        return DB::table($table)->where('id', '=', $ID_product)->update(array('range' => $updatedRange));
 
     }
 
-    public static function Update($sheet,$values,$ID_product,$table){
+    public static function Update($sheet, $values, $ID_product, $table)
+    {
         $client = new Client();
         $client->setApplicationName('Your App Name');
         $client->setScopes([Sheets::SPREADSHEETS]);
@@ -65,8 +72,8 @@ class InsertDataBookMenuAction
         $service = new Sheets($client);
 
         $spreadsheetId = '1ezq5ThxFIliPKe1ib7nuldoLtJOe0VHtGF2BKgjw2b4';
-        $r=DB::table($table)->where('id',$ID_product)->pluck('range')->first();
-        $range = $sheet.'!A'.self::calculateValueFromCellRange($r); // Adjust this range as needed bookshops
+        $r = DB::table($table)->where('id', $ID_product)->pluck('range')->first();
+        $range = $sheet . '!A' . self::calculateValueFromCellRange($r); // Adjust this range as needed bookshops
 
         $body = new \Google_Service_Sheets_ValueRange([
             'values' => $values,
@@ -80,7 +87,8 @@ class InsertDataBookMenuAction
     }
 
 
-    private static function calculateValueFromCellRange($range) {
+    private static function calculateValueFromCellRange($range)
+    {
         // Tách chuỗi để lấy phần số ở cuối
         $parts = explode(':', $range);
         $lastCell = end($parts);
@@ -92,5 +100,4 @@ class InsertDataBookMenuAction
 
         return $result;
     }
-
 }

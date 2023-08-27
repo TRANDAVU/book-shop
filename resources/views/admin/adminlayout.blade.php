@@ -123,11 +123,11 @@
 
 
           <li class="nav-item menu-items">
-            <a class="nav-link" href="/admin/author">
+            <a class="nav-link" href="/admin/chefs">
               <span class="menu-icon">
                 <i class="mdi mdi-food"></i>
               </span>
-              <span class="menu-title">Author</span>
+              <span class="menu-title">Chefs</span>
             </a>
           </li>
           @endif

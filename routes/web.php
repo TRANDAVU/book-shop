@@ -62,7 +62,7 @@ Route::get("/rate/confirm/{value}", [HomeController::class, 'store_rate'])->name
 
 
 Route::get("/cart", [CartController::class, 'index'])->name('cart');
-
+Route::get("/cart-all-update", [CartController::class, 'getAllUpdate'])->name('cart-all-update');
 
 Route::post('/menu/{product}', [CartController::class, 'store'])->name('cart.store');
 Route::post('/cart/{product}', [CartController::class, 'destroy'])->name('cart.destroy');
@@ -128,7 +128,7 @@ Route::get('/orders/cancel', [AdminController::class, 'orders_cancel'])->name('/
 Route::get('/add/menu', [AdminController::class, 'add_menu'])->name('/add/menu');
 Route::get('/add/chef', [AdminController::class, 'add_chef'])->name('/add/chef');
 
-Route::get('/admin/author', [AdminController::class, 'chefs'])->name('/admin/chefs');
+Route::get('/admin/chefs', [AdminController::class, 'chefs'])->name('/admin/chefs');
 
 
 

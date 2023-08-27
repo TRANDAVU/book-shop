@@ -28,7 +28,7 @@
             </td>
             <td>
                 <h2>{{ $products->name }}</h2>
-                <h4>VND: {{ $products->price }}</h4>
+                <h4>{{ $products->price }}</h4>
                 <p>{{ $products->description }}</p>
 
                 <?php

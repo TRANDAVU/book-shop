@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Mail\OrderShipped;
 use App\Models\Order;
 use Illuminate\Support\Facades\Mail;
+use App\Actions\Bookshop\InsertDataBookMenuAction;
 use Auth;
 use PDF;
 use QrCode;
@@ -59,16 +60,14 @@ class ShipmentController extends Controller
     public function place_order($total)
     {
 
-        return view('place_order',compact('total'));
-
-
+        return view('place_order', compact('total'));
     }
 
 
-    public function send(Request $request,$total)
+    public function send(Request $request, $total)
     {
 
-        $data=array();
+        $data = array();
 
         $invoice = substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyz"), 0, 8);
         /*
@@ -92,69 +91,57 @@ class ShipmentController extends Controller
         //return $invoice;
 
 
-        $data['shipping_address']=$request->address;
-        $data['product_order']="yes";
-        $data['invoice_no']=$invoice;
-        $data['pay_method']="Cash On Delivery";
-        $data['delivery_time']="3 hours";
-        $data['purchase_date']=date("Y-m-d");
+        $data['shipping_address'] = $request->address;
+        $data['product_order'] = "yes";
+        $data['invoice_no'] = $invoice;
+        $data['pay_method'] = "Cash On Delivery";
+        $data['delivery_time'] = "3 hours";
+        $data['purchase_date'] = date("Y-m-d");
 
 
 
 
 
-        $products = DB::table('carts')->where('user_id',Auth::user()->id)->where('product_order','no')->get();
+        $products = DB::table('carts')->where('user_id', Auth::user()->id)->where('product_order', 'no')->get();
 
-        $total = DB::table('carts')->where('user_id',Auth::user()->id)->where('product_order','no')->sum('subtotal');
+        $total = DB::table('carts')->where('user_id', Auth::user()->id)->where('product_order', 'no')->sum('subtotal');
 
-        $total = DB::table('carts')->where('user_id',Auth::user()->id)->where('product_order','no')->sum('subtotal');
-        $carts_amount = DB::table('carts')->where('user_id',Auth::user()->id)->where('product_order','no')->count();
-        $without_discount_price=$total;
-        $discount_price=0;
-        $coupon_code=NULL;
+        $total = DB::table('carts')->where('user_id', Auth::user()->id)->where('product_order', 'no')->sum('subtotal');
+        $carts_amount = DB::table('carts')->where('user_id', Auth::user()->id)->where('product_order', 'no')->count();
+        $without_discount_price = $total;
+        $discount_price = 0;
+        $coupon_code = NULL;
 
-        if($carts_amount>0)
-        {
-            foreach($products as $cart)
-            {
+        if ($carts_amount > 0) {
+            foreach ($products as $cart) {
 
-                $coupon_code=$cart->coupon_id;
-
-
-
+                $coupon_code = $cart->coupon_id;
             }
+        }
 
-         }
-
-         if($coupon_code!=NULL)
-         {
+        if ($coupon_code != NULL) {
 
 
-            $total = DB::table('carts')->where('user_id',Auth::user()->id)->where('product_order','no')->sum('subtotal');
+            $total = DB::table('carts')->where('user_id', Auth::user()->id)->where('product_order', 'no')->sum('subtotal');
 
 
-            $coupon_code_price=DB::table('coupons')->where('code',$coupon_code)->value('percentage');
+            $coupon_code_price = DB::table('coupons')->where('code', $coupon_code)->value('percentage');
 
-            $coupon_code_price=floor($coupon_code_price);
+            $coupon_code_price = floor($coupon_code_price);
 
-            $discount_price=(($total*$coupon_code_price)/100);
-            $discount_price=floor($discount_price);
+            $discount_price = (($total * $coupon_code_price) / 100);
+            $discount_price = floor($discount_price);
 
 
             $total = $total - $discount_price;
+        } else {
+
+            $total = DB::table('carts')->where('user_id', Auth::user()->id)->where('product_order', 'no')->sum('subtotal');
+        }
+
+        $carts = DB::table('carts')->where('user_id', Auth::user()->id)->where('product_order', 'no')->update($data);
 
 
-
-         }
-         else
-         {
-
-            $total = DB::table('carts')->where('user_id',Auth::user()->id)->where('product_order','no')->sum('subtotal');
-
-
-         }
-
-        $carts = DB::table('carts')->where('user_id',Auth::user()->id)->where('product_order','no')->update($data);
         /*
         $details = [
             'title' => 'Mail from RMS Admin',
@@ -169,7 +156,7 @@ class ShipmentController extends Controller
         $data["body"] = "Your reservation have been Placed Successfully";
 
 
-         /*
+        /*
          $files = [
              public_path('file/sample.pdf'),
          ];
@@ -187,59 +174,52 @@ class ShipmentController extends Controller
 
          */
 
-        $extra_charge=DB::table('charges')->get();
-        $total_extra_charge=DB::table('charges')->sum('price');
+        $extra_charge = DB::table('charges')->get();
+        $total_extra_charge = DB::table('charges')->sum('price');
 
 
-        $total=$total+$total_extra_charge;
-        $without_discount_price=$total+$total_extra_charge;
+        $total = $total + $total_extra_charge;
+        $without_discount_price = $total + $total_extra_charge;
 
-         Session::put('products',$products);
-         Session::put('invoice',$invoice);
-         Session::put('total',$total);
-         Session::put('extra_charge',$extra_charge);
-         Session::put('discount_price',$discount_price);
-         Session::put('without_discount_price',$without_discount_price);
-         Session::put('date',date("Y-m-d"));
-
-
-         if($invoice==NULL)
-         {
-
-              $invoice="RMS";
+        Session::put('products', $products);
+        Session::put('invoice', $invoice);
+        Session::put('total', $total);
+        Session::put('extra_charge', $extra_charge);
+        Session::put('discount_price', $discount_price);
+        Session::put('without_discount_price', $without_discount_price);
+        Session::put('date', date("Y-m-d"));
 
 
-         }
+        if ($invoice == NULL) {
+
+            $invoice = "RMS";
+        }
 
 
         // return $invoice;
 
 
-         $qrcode = base64_encode(QrCode::format('svg')->size(100)->errorCorrection('H')->generate('RMS Verified'));
-         $pdf = PDF::loadView('mails.PaymentMail', $data);
+        $qrcode = base64_encode(QrCode::format('svg')->size(100)->errorCorrection('H')->generate('RMS Verified'));
+        $pdf = PDF::loadView('mails.PaymentMail', $data);
 
-         Session::put('qrcode',$qrcode);
+        Session::put('qrcode', $qrcode);
 
 
         //
         //return view('mails.PaymentMail');
 
-        if($carts)
-        {
+        // if ($carts) {
 
-            \Mail::send('mails.PaymentMail', $data, function($message)use($data, $pdf) {
-                $message->to(Auth::user()->email,Auth::user()->email)
-                        ->subject($data["title"])
-                        ->attachData($pdf->output(), "Order Copy.pdf");
-            });
-
-
-
-        }
+        //     \Mail::send('mails.PaymentMail', $data, function ($message) use ($data, $pdf) {
+        //         $message->to(Auth::user()->email, Auth::user()->email)
+        //             ->subject($data["title"])
+        //             ->attachData($pdf->output(), "Order Copy.pdf");
+        //     });
+        // }
 
 
 
-        return view('Confirm_order',compact('invoice','products','total'));
+        return view('Confirm_order', compact('invoice', 'products', 'total'));
     }
 
 
@@ -291,20 +271,15 @@ class ShipmentController extends Controller
     public function my_order()
     {
 
-        if(!Auth::user())
-        {
+        if (!Auth::user()) {
 
             return redirect()->route('login');
-
         }
 
 
-        $carts = Cart::all()->where('user_id',Auth::user()->id)->where('product_order','!=','no');
-        $total_price = DB::table('carts')->where('user_id',Auth::user()->id)->where('product_order','!=','no')->sum('subtotal');
-        return view("my_order", compact('carts','total_price'));
-
-
-
+        $carts = Cart::all()->where('user_id', Auth::user()->id)->where('product_order', '!=', 'no');
+        $total_price = DB::table('carts')->where('user_id', Auth::user()->id)->where('product_order', '!=', 'no')->sum('subtotal');
+        return view("my_order", compact('carts', 'total_price'));
     }
     // public function trace()
     // {
@@ -328,88 +303,65 @@ class ShipmentController extends Controller
     public function trace_confirm(Request $req)
     {
 
-        if(!Auth::user())
-        {
+        if (!Auth::user()) {
 
             return redirect()->route('login');
-
         }
-        $carts = DB::table('carts')->where('user_id',Auth::user()->id)->where('product_order','!=','no')->where('invoice_no',$req->invoice)->count();
+        $carts = DB::table('carts')->where('user_id', Auth::user()->id)->where('product_order', '!=', 'no')->where('invoice_no', $req->invoice)->count();
 
-        if($carts==0)
-        {
+        if ($carts == 0) {
 
-            session()->flash('wrong','Invaild Invoice no !');
+            session()->flash('wrong', 'Invaild Invoice no !');
             return back();
-
         }
 
-        if($req->phone!=Auth::user()->phone)
-        {
+        if ($req->phone != Auth::user()->phone) {
 
-            session()->flash('wrong','Wrong phone no !');
+            session()->flash('wrong', 'Wrong phone no !');
             return back();
-
         }
 
 
-        $carts = Cart::all()->where('user_id',Auth::user()->id)->where('product_order','!=','no')->where('invoice_no',$req->invoice);
-        $total_price = DB::table('carts')->where('user_id',Auth::user()->id)->where('product_order','!=','no')->where('invoice_no',$req->invoice)->sum('subtotal');
-        $carts_amount = DB::table('carts')->where('user_id',Auth::user()->id)->where('product_order','!=','no')->where('invoice_no',$req->invoice)->count();
-        $without_discount_price=$total_price;
-        $discount_price=0;
-        $coupon_code=NULL;
+        $carts = Cart::all()->where('user_id', Auth::user()->id)->where('product_order', '!=', 'no')->where('invoice_no', $req->invoice);
+        $total_price = DB::table('carts')->where('user_id', Auth::user()->id)->where('product_order', '!=', 'no')->where('invoice_no', $req->invoice)->sum('subtotal');
+        $carts_amount = DB::table('carts')->where('user_id', Auth::user()->id)->where('product_order', '!=', 'no')->where('invoice_no', $req->invoice)->count();
+        $without_discount_price = $total_price;
+        $discount_price = 0;
+        $coupon_code = NULL;
 
-        if($carts_amount>0)
-        {
-            foreach($carts as $cart)
-            {
+        if ($carts_amount > 0) {
+            foreach ($carts as $cart) {
 
-                $coupon_code=$cart->coupon_id;
-
-
-
+                $coupon_code = $cart->coupon_id;
             }
+        }
 
-         }
-
-         if($coupon_code!=NULL)
-         {
+        if ($coupon_code != NULL) {
 
 
-            $total_price = DB::table('carts')->where('user_id',Auth::user()->id)->where('product_order','!=','no')->where('invoice_no',$req->invoice)->sum('subtotal');
+            $total_price = DB::table('carts')->where('user_id', Auth::user()->id)->where('product_order', '!=', 'no')->where('invoice_no', $req->invoice)->sum('subtotal');
 
 
-            $coupon_code_price=DB::table('coupons')->where('code',$coupon_code)->value('percentage');
+            $coupon_code_price = DB::table('coupons')->where('code', $coupon_code)->value('percentage');
 
-            $coupon_code_price=floor($coupon_code_price);
+            $coupon_code_price = floor($coupon_code_price);
 
-            $discount_price=(($total_price*$coupon_code_price)/100);
-            $discount_price=floor($discount_price);
+            $discount_price = (($total_price * $coupon_code_price) / 100);
+            $discount_price = floor($discount_price);
 
 
             $total_price = $total_price - $discount_price;
+        } else {
 
+            $total_price = DB::table('carts')->where('user_id', Auth::user()->id)->where('product_order', '!=', 'no')->where('invoice_no', $req->invoice)->sum('subtotal');
+        }
+        $extra_charge = DB::table('charges')->get();
+        $total_extra_charge = DB::table('charges')->sum('price');
 
+        $total_price = $total_price + $total_extra_charge;
+        $without_discount_price = $without_discount_price + $total_extra_charge;
 
-         }
-         else
-         {
-
-            $total_price = DB::table('carts')->where('user_id',Auth::user()->id)->where('product_order','!=','no')->where('invoice_no',$req->invoice)->sum('subtotal');
-
-
-         }
-         $extra_charge=DB::table('charges')->get();
-         $total_extra_charge=DB::table('charges')->sum('price');
-
-         $total_price=$total_price+$total_extra_charge;
-         $without_discount_price=$without_discount_price+$total_extra_charge;
-
-        return view("trace_confirm", compact('carts','total_price','extra_charge','discount_price','without_discount_price'));
-
-
-
+        return view("trace_confirm", compact('carts', 'total_price', 'extra_charge', 'discount_price', 'without_discount_price'));
     }
 
 
@@ -417,53 +369,38 @@ class ShipmentController extends Controller
     {
 
 
-        $coupon_code=DB::table('coupons')->where('code',$req->code)->count();
+        $coupon_code = DB::table('coupons')->where('code', $req->code)->count();
 
-        if($coupon_code == 0)
-        {
+        if ($coupon_code == 0) {
 
-            session()->flash('wrong','Wrong Coupon Code !');
+            session()->flash('wrong', 'Wrong Coupon Code !');
             return back();
-
         }
-        $validate=DB::table('coupons')->where('code',$req->code)->value('validate');
+        $validate = DB::table('coupons')->where('code', $req->code)->value('validate');
 
-        $today=date("Y-m-d");
+        $today = date("Y-m-d");
 
-        if($validate < $today)
-        {
+        if ($validate < $today) {
 
-            session()->flash('wrong','Expire Validation Date !');
+            session()->flash('wrong', 'Expire Validation Date !');
             return back();
-
-
-
         }
 
-        $data=array();
+        $data = array();
 
-        $data['coupon_id']=$req->code;
+        $data['coupon_id'] = $req->code;
 
-        $update_coupon=DB::table('carts')->where('user_id',Auth::user()->id)->where('product_order','no')->update($data);
+        $update_coupon = DB::table('carts')->where('user_id', Auth::user()->id)->where('product_order', 'no')->update($data);
 
-        if($update_coupon)
-        {
-
+        if ($update_coupon) {
 
 
-           return redirect('/cart');
 
-        }
-        else
-        {
+            return redirect('/cart');
+        } else {
 
-            session()->flash('wrong','Already applied this code !');
+            session()->flash('wrong', 'Already applied this code !');
             return back();
-
-
         }
-
-
     }
-
 }

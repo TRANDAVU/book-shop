@@ -47,17 +47,16 @@
                       <div class="form-group">
                         <label for="exampleSelectGender">Catagory</label>
                         <select class="form-control" name="catagory" id="exampleSelectGender">
-                          <option value="modern" @php if($product->catagory=="modern"){ echo"selected"; }   @endphp>Modern</option>
-                          <option value="childhoods" @php if($product->catagory=="childhoods"){ echo"selected"; }   @endphp>Childhoods</option>
-                          <option value="history" @php if($product->catagory=="history"){ echo"selected"; }   @endphp>History</option>
+                          <option value="regular" @php if($product->catagory=="regular"){ echo"selected"; }   @endphp>Regular</option>
+                          <option value="special" @php if($product->catagory=="special"){ echo"selected"; }   @endphp>Special</option>
                         </select>
                       </div>
                       <div class="form-group">
                         <label for="exampleSelectGender">Season</label>
                         <select class="form-control" name="session" id="exampleSelectGender">
-                          <option value="0" @php if($product->session=="0"){ echo"selected"; }   @endphp>Long episode</option>
-                          <option value="1" @php if($product->session=="1"){ echo"selected"; }   @endphp>Session</option>
-                          <option value="2" @php if($product->session=="2"){ echo"selected"; }   @endphp>Novel</option>
+                          <option value="0" @php if($product->session=="0"){ echo"selected"; }   @endphp>Breakfast</option>
+                          <option value="1" @php if($product->session=="1"){ echo"selected"; }   @endphp>Lunch</option>
+                          <option value="2" @php if($product->session=="2"){ echo"selected"; }   @endphp>Dinner</option>
                         </select>
                       </div>
 

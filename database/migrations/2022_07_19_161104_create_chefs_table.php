@@ -13,7 +13,7 @@ class CreateChefsTable extends Migration
      */
     public function up()
     {
-        Schema::create('author', function (Blueprint $table) {
+        Schema::create('chefs', function (Blueprint $table) {
             $table->id();
             $table->string("name")->nullable();
             $table->string("product_id")->nullable();
@@ -32,6 +32,6 @@ class CreateChefsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('author');
+        Schema::dropIfExists('chefs');
     }
 }

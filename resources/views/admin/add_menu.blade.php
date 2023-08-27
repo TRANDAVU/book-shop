@@ -45,17 +45,16 @@
                       <div class="form-group">
                         <label for="exampleSelectGender">Catagory</label>
                         <select class="form-control" name="catagory" id="exampleSelectGender">
-                          <option value="modern">Modern</option>
-                          <option value="childhoods">Childhoods</option>
-                          <option value="history">History</option>
+                          <option value="regular">Regular</option>
+                          <option value="special">Special</option>
                         </select>
                       </div>
                       <div class="form-group">
                         <label for="exampleSelectGender">Season</label>
                         <select class="form-control" name="session" id="exampleSelectGender">
-                          <option value="0">Long episode</option>
-                          <option value="1">Session</option>
-                          <option value="2">Novel</option>
+                          <option value="0">Breakfast</option>
+                          <option value="1">Lunch</option>
+                          <option value="2">Dinner</option>
                         </select>
                       </div>
 
