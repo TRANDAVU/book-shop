@@ -117,7 +117,7 @@
               <span class="menu-icon">
                 <i class="mdi mdi-food"></i>
               </span>
-              <span class="menu-title">Book Menu</span>
+              <span class="menu-title">Menu</span>
             </a>
           </li>
 
