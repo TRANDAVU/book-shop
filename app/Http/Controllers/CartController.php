@@ -71,7 +71,6 @@ class CartController extends Controller
         $total_extra_charge = DB::table('charges')->sum('price');
 
 
-
         return view("cart", compact('carts', 'total_price', 'discount_price', 'without_discount_price', 'extra_charge', 'total_extra_charge'));
     }
 

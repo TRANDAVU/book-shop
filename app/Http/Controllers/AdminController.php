@@ -1360,12 +1360,12 @@ class AdminController extends Controller
             [$insert, $req->name, $req->price],
         ];
 
-return InsertDataBookMenuAction::Insert('charges_menu', $values, $insert, 'charges');
-        if (InsertDataBookMenuAction::Insert('charges_menu', $values, $insert, 'charges') != null) {
-            session()->flash('success', 'Charge added successfully !');
+        InsertDataBookMenuAction::Insert('charges_menu', $values, $insert, 'charges');
+        // if (InsertDataBookMenuAction::Insert('charges_menu', $values, $insert, 'charges') != null) {
+        session()->flash('success', 'Charge added successfully !');
 
-            return back();
-        }
+        return back();
+        // }
 
     }
 
