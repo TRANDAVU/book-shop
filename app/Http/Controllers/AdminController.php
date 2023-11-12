@@ -28,7 +28,7 @@ class AdminController extends Controller
 
         return redirect('redirects');
     }
-    public function book_menu()
+    public function book_menu(Request $request)
     {
         // $chefs = DB::table('chefs')->where('id',14)->first();
         // dd(InsertDataBookMenuAction::calculateValueFromCellRange($chefs->range));
@@ -46,8 +46,13 @@ class AdminController extends Controller
         $total_products = DB::table('products')->count();
 
         $fraction = $total_products % 3;
+        if ($request->has('query')) {
+            $query = $request->input('query');
+            $products = DB::table('products')->where('name', 'like', '%' . $query . '%')->get();
+        } else {
+            $products = DB::table('products')->get();
+        }
 
-        $products = DB::table('products')->get();
 
 
         $fraction_products = DB::table('products')->latest()->get();

@@ -277,8 +277,11 @@
             </button>
             <ul class="navbar-nav w-100">
               <li class="nav-item w-100">
-                <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
-                  <input type="text" class="form-control" placeholder="Search products">
+                <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex" method="get" action="{{ asset('admin/book-menu') }}" name="search">
+                    <div class="input-group">
+                        <input type="search" class="form-control" name="query" placeholder="Search product" aria-label="Search product" aria-describedby="search-button">
+                        <button class="btn btn-primary" type="submit" id="search-button">Search</button>
+                    </div>
                 </form>
               </li>
             </ul>
