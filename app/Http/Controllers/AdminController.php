@@ -86,15 +86,24 @@ class AdminController extends Controller
 
         return view('admin.chefs', compact('chefs', 'fraction', 'total_chefs', 'fraction_chefs'));
     }
-    public function order_incomplete()
+    public function order_incomplete(Request $request)
     {
 
 
-        // dd($orders);
+        // dd($orders);3313
 
-        $orders = DB::table('carts')->where('product_order', 'yes')
-            ->groupBy('invoice_no')
-            ->get();
+        if ($request->has('query')) {
+            $query = $request->input('query');
+            $orders = DB::table('carts')->where('product_order', 'yes')
+                ->where('purchase_date', 'like', '%' . $query . '%')
+                ->groupBy('invoice_no')
+                ->get();
+        } else {
+            $orders = DB::table('carts')->where('product_order', 'yes')
+                ->groupBy('invoice_no')
+                ->get();
+        }
+
 
 
         return view('admin.incomplete-orders', compact('orders'));
@@ -149,10 +158,16 @@ class AdminController extends Controller
 
         return view('admin.admins', compact('admins'));
     }
-    public function user_show()
+    public function user_show(Request $request)
     {
 
-        $users = DB::table('users')->where('usertype', '!=', '1')->get();
+        if ($request->has('query')) {
+            $query = $request->input('query');
+            $users = DB::table('users')->where('name', 'like', '%' . $query . '%')->where('usertype', '!=', '1')->get();
+        } else {
+            $users = DB::table('users')->where('usertype', '!=', '1')->get();
+        }
+
 
 
         return view('admin.users', compact('users'));
